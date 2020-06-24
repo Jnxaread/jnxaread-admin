@@ -8,6 +8,10 @@
             <Icon type="md-people"/>
             <span>用户</span>
         </MenuItem>
+        <MenuItem name="fiction" to="/fiction">
+            <Icon type="ios-book" />
+            <span>作品</span>
+        </MenuItem>
         <MenuItem name="announcement" to="/notice">
             <Icon type="md-flag"/>
             <span>公告</span>

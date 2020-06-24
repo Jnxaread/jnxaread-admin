@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login'
 import Home from '../views/Home'
 import User from '../views/user/User'
+import Notice from '../views/forum/Notice'
+import Topic from '../views/forum/Topic'
+import NewNotice from '../views/forum/NewNotice'
 
 Vue.use(VueRouter);
 
@@ -21,7 +24,7 @@ Vue.use(VueRouter);
           name: 'user',
           component: User
         },
-        /*{
+        {
           path: '/notice',
           name: 'notice',
           component: Notice
@@ -33,9 +36,9 @@ Vue.use(VueRouter);
         },
         {
           path: '/toSubmitNotice',
-          name: 'submitNotice',
-          component: SubmitNotice
-        },*/
+          name: 'NewNotice',
+          component: NewNotice
+        },
       ]
     },
 ];
