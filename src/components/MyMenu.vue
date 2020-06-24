@@ -8,9 +8,17 @@
             <Icon type="md-people"/>
             <span>用户</span>
         </MenuItem>
+        <MenuItem name="category" to="/category">
+            <Icon custom="iconfont icon-category" />
+            <span>分类</span>
+        </MenuItem>
         <MenuItem name="fiction" to="/fiction">
             <Icon type="ios-book" />
             <span>作品</span>
+        </MenuItem>
+        <MenuItem name="board" to="/board">
+            <Icon custom="iconfont icon-board" />
+            <span>版块</span>
         </MenuItem>
         <MenuItem name="announcement" to="/notice">
             <Icon type="md-flag"/>
@@ -57,6 +65,9 @@
 </script>
 
 <style scoped>
+    @import "../assets/icons/category/iconfont.css";
+    @import "../assets/icons/board/iconfont.css";
+
     .menu-item span {
         display: inline-block;
         overflow: hidden;

@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2013-9-30: Created.
+-->
+<svg>
+<metadata>
+Created by iconfont
+</metadata>
+<defs>
+
+<font id="iconfont" horiz-adv-x="1024" >
+  <font-face
+    font-family="iconfont"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="1024"
+    ascent="896"
+    descent="-128"
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="category" unicode="&#58919;" d="M384-32H192a96 96 0 0 0-96 96V256a96 96 0 0 0 96 96h192a96 96 0 0 0 96-96v-192a96 96 0 0 0-96-96zM192 288a32 32 0 0 1-32-32v-192a32 32 0 0 1 32-32h192a32 32 0 0 1 32 32V256a32 32 0 0 1-32 32H192zM784-32H640a96 96 0 0 0-96 96V256a96 96 0 0 0 96 96h192a96 96 0 0 0 96-96v-144a32 32 0 0 0-64 0V256a32 32 0 0 1-32 32H640a32 32 0 0 1-32-32v-192a32 32 0 0 1 32-32h144a32 32 0 0 0 0-64zM384 416H192a96 96 0 0 0-96 96V704a96 96 0 0 0 96 96h192a96 96 0 0 0 96-96v-192a96 96 0 0 0-96-96zM192 736a32 32 0 0 1-32-32v-192a32 32 0 0 1 32-32h192a32 32 0 0 1 32 32V704a32 32 0 0 1-32 32H192zM832 416H640a96 96 0 0 0-96 96V704a96 96 0 0 0 96 96h192a96 96 0 0 0 96-96v-192a96 96 0 0 0-96-96zM640 736a32 32 0 0 1-32-32v-192a32 32 0 0 1 32-32h192a32 32 0 0 1 32 32V704a32 32 0 0 1-32 32H640z"  horiz-adv-x="1024" />
+
+    
+
+
+  </font>
+</defs></svg>
