@@ -26,6 +26,14 @@ axios.defaults.baseURL = 'http://localhost:6002';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;
 
+// http request 拦截器
+axios.interceptors.request.use(config => {
+  config.data = qs.stringify(config.data);
+  return config;
+}, error => {
+  return Promise.reject(error)
+});
+
 new Vue({
   router,
   store,
