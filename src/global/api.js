@@ -17,11 +17,13 @@ export default {
         newFiction: '/library/new/fiction',
         newChapter: '/library/new/chapter',
         newComment: '/library/new/comment',
+        newCategory: '/library/new/category',
         editChapter: '/library/edit/chapter',
         hideChapter: '/library/hide/chapter',
         deleteChapter: '/library/delete/chapter',
     },
     forum: {
+        boards: '/forum/list/board',
         notices: '/forum/list/notice',
         topics: '/forum/list/topic',
         latestTopics: '/forum/list/topic/latest',
