@@ -54,7 +54,7 @@
                 this.$refs.side1.toggleCollapse();
             },
             logout() {
-                this.axios.post('/logout').then(() => {
+                this.axios.post(this.api.user.logout).then(() => {
                     /*let resp = response.data;
                     if (resp.status != 200) {
                         this.$Message['error']({

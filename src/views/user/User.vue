@@ -137,7 +137,7 @@
                 let params = {
                     page: this.paging.currentPage
                 };
-                this.axios.post('/list/user', params).then(response => {
+                this.axios.post(this.api.user.users, params).then(response => {
                     let resp = response.data;
                     if (resp.status !== 200) {
                         this.$Message.error(resp.msg);
