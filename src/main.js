@@ -24,7 +24,7 @@ Vue.filter('dateFormat', function (tick) {
 });
 
 //开发环境
-axios.defaults.baseURL = 'http://localhost:6002';
+axios.defaults.baseURL = 'http://localhost:6002/admin';
 //生产环境
 //axios.defaults.baseURL = 'http://inhive.net/admin-server';
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
