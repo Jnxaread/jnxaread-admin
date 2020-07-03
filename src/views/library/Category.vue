@@ -84,7 +84,7 @@
                 this.getCategories();
             },
             getCategories() {
-                this.axios.post(this.api.library.categories, this.form).then(response => {
+                this.axios.post(this.api.library.categories).then(response => {
                     let resp = response.data;
                     if (resp.status !== 200) {
                         this.$Message.error(resp.msg);

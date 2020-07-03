@@ -6,10 +6,10 @@
         <Table :columns="columns" :data="data"></Table>
         <Modal v-model="showModal" title="添加分类" okText="保存" @on-ok="saveBoard">
             <Form class="modal_form" :model="newBoard" :label-width="80">
-                <FormItem label="类别名称">
+                <FormItem label="版块名称">
                     <Input v-model="newBoard.name" size="large"/>
                 </FormItem>
-                <FormItem label="类别说明">
+                <FormItem label="版块说明">
                     <Input v-model="newBoard.description" type="textarea" :rows="6"/>
                 </FormItem>
                 <FormItem label="限制等级">
@@ -81,10 +81,10 @@
         },
         methods: {
             init() {
-                this.getCategories();
+                this.getBoards();
             },
-            getCategories() {
-                this.axios.post(this.api.forum.boards, this.form).then(response => {
+            getBoards() {
+                this.axios.post(this.api.forum.boards).then(response => {
                     let resp = response.data;
                     if (resp.status !== 200) {
                         this.$Message.error(resp.msg);
@@ -97,13 +97,13 @@
                 this.showModal = true;
             },
             saveBoard() {
-                this.axios.post(this.api.library.newBoard, this.newBoard).then(response => {
+                this.axios.post(this.api.forum.newBoard, this.newBoard).then(response => {
                     let resp = response.data;
                     if (resp.status !== 200) {
                         this.$Message.error(resp.msg);
                         return;
                     }
-                    this.getCategories();
+                    this.getBoards();
                 })
             },
         }
