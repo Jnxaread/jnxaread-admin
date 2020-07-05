@@ -10,3 +10,9 @@
     height: 100%;
   }
 </style>
+
+<style>
+  .ivu-input:focus {
+    box-shadow: none;
+  }
+</style>
