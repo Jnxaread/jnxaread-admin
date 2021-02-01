@@ -139,7 +139,7 @@
                 };
                 this.axios.post(this.api.user.users, params).then(response => {
                     let resp = response.data;
-                    if (resp.status !== 200) {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -154,7 +154,7 @@
                 };
                 this.axios.post('/lockUser', params).then(response => {
                     let resp = response.data;
-                    if (resp.status !== 200) {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -176,6 +176,6 @@
 <style scoped>
     .paging_box {
         float: right;
-        margin: 20px 45px 30px 0px;
+        margin: 20px 45px 30px 0;
     }
 </style>

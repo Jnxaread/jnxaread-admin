@@ -31,5 +31,9 @@ export default {
         newTopic: '/forum/new/topic',
         newReply: '/forum/new/reply',
         newBoard: '/forum/new/board',
+    },
+    project: {
+        version: "/project/list/version",
+        newVersion: "/project/new/version"
     }
 };

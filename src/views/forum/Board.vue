@@ -86,7 +86,7 @@
             getBoards() {
                 this.axios.post(this.api.forum.boards).then(response => {
                     let resp = response.data;
-                    if (resp.status !== 200) {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -99,7 +99,7 @@
             saveBoard() {
                 this.axios.post(this.api.forum.newBoard, this.newBoard).then(response => {
                     let resp = response.data;
-                    if (resp.status !== 200) {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }

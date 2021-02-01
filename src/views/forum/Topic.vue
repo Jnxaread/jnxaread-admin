@@ -248,7 +248,7 @@
                 };
                 this.axios.post('/allTopic', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != 200) {
+                    if (resp.status != "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -263,7 +263,7 @@
                 };
                 this.axios.post('/topic', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != 200) {
+                    if (resp.status != "000000") {
                         this.$Message.error(resp.msg);
                         this.$router.push('/');
                         return;
@@ -312,7 +312,7 @@
                 };
                 this.axios.post('/lockTopic', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != 200) {
+                    if (resp.status != "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -328,7 +328,7 @@
                 };
                 this.axios.post('/hideTopic', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != 200) {
+                    if (resp.status != "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -343,7 +343,7 @@
                 };
                 this.axios.post('/deleteTopic', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != 200) {
+                    if (resp.status != "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -358,7 +358,7 @@
                 };
                 this.axios.post('/deleteReply', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != 200) {
+                    if (resp.status != "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }

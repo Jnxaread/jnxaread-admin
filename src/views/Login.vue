@@ -32,7 +32,7 @@
             login() {
                 this.axios.post(this.api.user.login, this.form).then(response => {
                     let resp = response.data;
-                    if (resp.status !== 200) {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }

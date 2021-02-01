@@ -86,7 +86,7 @@
             getCategories() {
                 this.axios.post(this.api.library.categories).then(response => {
                     let resp = response.data;
-                    if (resp.status !== 200) {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -99,7 +99,7 @@
             saveCategory() {
                 this.axios.post(this.api.library.newCategory, this.newCategory).then(response => {
                     let resp = response.data;
-                    if (resp.status !== 200) {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }

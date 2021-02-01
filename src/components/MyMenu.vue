@@ -32,6 +32,10 @@
             <Icon type="md-trending-up"/>
             <span>图表</span>
         </MenuItem>
+        <MenuItem name="project" to="/project">
+            <Icon type="md-trending-up"/>
+            <span>版本</span>
+        </MenuItem>
         <MenuItem name="setting" to="/">
             <Icon type="ios-settings"></Icon>
             <span>设置</span>

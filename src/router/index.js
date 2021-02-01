@@ -7,7 +7,8 @@ import Notice from '../views/forum/Notice'
 import Topic from '../views/forum/Topic'
 import NewNotice from '../views/forum/NewNotice'
 import Category from '../views/library/Category'
-import Board from '../views/forum/Board'
+import Board from '../views/forum/Board';
+import Project from "@/views/project/Project";
 
 Vue.use(VueRouter);
 
@@ -51,6 +52,11 @@ const routes = [
                 name: 'Board',
                 component: Board
             },
+            {
+                path: '/project',
+                name: 'Project',
+                component: Project
+            },
         ]
     },
 ];
@@ -63,18 +69,18 @@ const router = new VueRouter({
 
 //全局守卫路由
 router.beforeEach((to, from, next) => {
-    const LOGINURL = '/login';
+    const LOGIN_URL = '/login';
     let url, user;
     url = to.path;
     user = sessionStorage.getItem('user');
 
-    if (url === LOGINURL) {
+    if (url === LOGIN_URL) {
         sessionStorage.removeItem('user');
     }
 
     //判断是否登录
-    if (!user && url !== LOGINURL) {
-        next({path: LOGINURL});
+    if (!user && url !== LOGIN_URL) {
+        next({path: LOGIN_URL});
     } else {
         next();
     }

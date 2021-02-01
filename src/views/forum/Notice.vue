@@ -217,7 +217,7 @@
                 };
                 this.axios.post('/allNotice', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != 200) {
+                    if (resp.status != "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -231,7 +231,7 @@
                 };
                 this.axios.post('/notice', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != 200) {
+                    if (resp.status != "000000") {
                         this.$Message.error(resp.msg);
                         this.$router.push('/');
                         return;
@@ -253,7 +253,7 @@
                 };
                 this.axios.post('/lockNotice', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != 200) {
+                    if (resp.status != "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -274,7 +274,7 @@
                 };
                 this.axios.post('/hideNotice', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != 200) {
+                    if (resp.status != "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -289,7 +289,7 @@
                 };
                 this.axios.post('/deleteNotice', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != 200) {
+                    if (resp.status != "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }

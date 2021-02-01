@@ -60,7 +60,7 @@ export default {
             let params = this.qs.stringify(initParams);
             this.axios.post('/notice', params).then(response => {
                 let resp = response.data;
-                if (resp.status !== 200) {
+                if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
                     this.$router.push('/');
                     return;
@@ -111,7 +111,7 @@ export default {
             if (this.notice.id == null) {
                 this.axios.post('/forum/new/notice', this.notice).then(response => {
                     let resp = response.data;
-                    if (resp.status !== 200) {
+                    if (resp.status !== "000000") {
                         this.instance('error', resp.msg);
                         return;
                     }
@@ -120,7 +120,7 @@ export default {
             } else {
                 this.axios.post('/editNotice', this.notice).then(response => {
                     let resp = response.data;
-                    if (resp.status !== 200) {
+                    if (resp.status !== "000000") {
                         this.instance('error', resp.msg);
                         return;
                     }
