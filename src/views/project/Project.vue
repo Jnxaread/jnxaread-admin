@@ -11,18 +11,34 @@
         <Modal v-model="showModal" title="发布版本" okText="保存" @on-ok="saveVersion">
             <Form class="modal_form" :model="newVersion" :label-width="80">
                 <FormItem label="版本号">
-                    <Input v-model="newVersion.version" size="large"/>
+                    <label>
+                        <Input v-model="newVersion.version" size="large"/>
+                    </label>
                 </FormItem>
                 <FormItem label="版本信息">
-                    <Input v-model="newVersion.versionInfo" type="textarea" :rows="6"/>
+                    <label>
+                        <Input v-model="newVersion.versionInfo" type="textarea" :rows="6"/>
+                    </label>
                 </FormItem>
                 <FormItem label="系统类别">
-                    <Select class="new_system" v-model="newVersion.system">
-                        <Option value="0">客户端系统</Option>
-                        <Option value="1">服务端系统</Option>
-                        <Option value="2">后台管理系统</Option>
-                        <Option value="3">后台服务系统</Option>
-                    </Select>
+                    <label>
+                        <Select class="new_system" v-model="newVersion.system">
+                            <Option value="0">客户端系统</Option>
+                            <Option value="1">服务端系统</Option>
+                            <Option value="2">后台管理系统</Option>
+                            <Option value="3">后台服务系统</Option>
+                        </Select>
+                    </label>
+                </FormItem>
+                <FormItem label="版本状态">
+                    <label>
+                        <Select class="new_system" v-model="newVersion.status">
+                            <Option value="0">未上线</Option>
+                            <Option value="1">已上线</Option>
+                            <Option value="2">已下线</Option>
+                            <Option value="3">已废弃</Option>
+                        </Select>
+                    </label>
                 </FormItem>
             </Form>
         </Modal>
@@ -57,6 +73,11 @@ export default {
                     align: 'center'
                 },
                 {
+                    title: '版本状态',
+                    key: 'status',
+                    align: 'center'
+                },
+                {
                     title: '发布时间',
                     key: 'createTime',
                     align: 'center',
@@ -76,6 +97,7 @@ export default {
                 version: "",
                 versionInfo: "",
                 system: "",
+                status: "",
             }
         }
     },
@@ -97,7 +119,6 @@ export default {
                     return;
                 }
                 this.data = resp.data;
-                // this.paging.total = resp.data.userCount;
             })
         },
         addVersion() {
@@ -111,7 +132,7 @@ export default {
             return moment(tick).format("YYYY-MM-DD HH:mm:ss");
         },
         saveVersion() {
-            this.axios.post(this.api.project.newVersion, this.newCategory).then(response => {
+            this.axios.post(this.api.project.newVersion, this.newVersion).then(response => {
                 let resp = response.data;
                 if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
