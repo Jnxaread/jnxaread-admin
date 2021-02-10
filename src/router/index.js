@@ -9,6 +9,7 @@ import NewNotice from '../views/forum/NewNotice'
 import Category from '../views/library/Category'
 import Board from '../views/forum/Board';
 import Project from "@/views/project/Project";
+import Fiction from "@/views/library/Fiction";
 
 Vue.use(VueRouter);
 
@@ -56,6 +57,11 @@ const routes = [
                 path: '/project',
                 name: 'Project',
                 component: Project
+            },
+            {
+                path: '/fiction',
+                name: 'Fiction',
+                component: Fiction
             },
         ]
     },
