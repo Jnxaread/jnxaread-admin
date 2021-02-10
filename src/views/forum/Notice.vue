@@ -44,7 +44,7 @@
                         key: 'title',
                         render: (h, params) => {
                             let titleClass;
-                            if (params.row.hided == true) {
+                            if (params.row.hided === true) {
                                 titleClass = 'table_title_hided';
                             } else {
                                 titleClass = 'table_title';
@@ -123,7 +123,7 @@
                             let hidedButton;
                             let hidedType;
                             let hided;
-                            if (params.row.hided == true) {
+                            if (params.row.hided === true) {
                                 hidedButton = '上架';
                                 hidedType = 'success';
                                 hided = 0;
@@ -215,9 +215,9 @@
                 let params = {
                     page: this.paging.currentPage
                 };
-                this.axios.post('/allNotice', params).then(response => {
+                this.axios.post(this.api.forum.notices, params).then(response => {
                     let resp = response.data;
-                    if (resp.status != "000000") {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -231,7 +231,7 @@
                 };
                 this.axios.post('/notice', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != "000000") {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         this.$router.push('/');
                         return;
@@ -253,7 +253,7 @@
                 };
                 this.axios.post('/lockNotice', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != "000000") {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -262,10 +262,11 @@
                     this.$Message.success('操作成功！');
                 })
             },
+
             /**
-             * hided:【0：上架；1：下架】
+             * 下架公告
              * @param id
-             * @param operate
+             * @param hided 【0：上架；1：下架】
              */
             hideNotice(id, hided) {
                 let params = {
@@ -274,7 +275,7 @@
                 };
                 this.axios.post('/hideNotice', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != "000000") {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -289,7 +290,7 @@
                 };
                 this.axios.post('/deleteNotice', params).then(response => {
                     let resp = response.data;
-                    if (resp.status != "000000") {
+                    if (resp.status !== "000000") {
                         this.$Message.error(resp.msg);
                         return;
                     }
@@ -324,13 +325,13 @@
 
     .paging_box {
         float: right;
-        margin: 20px 45px 30px 0px;
+        margin: 20px 45px 30px 0;
     }
 
     .topic {
         width: 98%;
         padding: 20px;
-        margin: 0px auto;
+        margin: 0 auto;
         border-radius: 10px;
         border: 2px solid #819799;
     }
@@ -372,12 +373,12 @@
     .topic_time {
         color: cadetblue;
         display: inline;
-        padding: 0px 15px;
+        padding: 0 15px;
     }
 
     .topic_content {
         width: 100%;
-        padding: 0px 15px;
+        padding: 0 15px;
         margin-top: 25px;
         font-size: 1.3em;
         color: black;
