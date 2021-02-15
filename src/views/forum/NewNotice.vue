@@ -53,12 +53,10 @@ export default {
             this.getNoticeDetail(id);
         },
         getNoticeDetail(id) {
-            let initParams = {
+            let params = {
                 'id': id,
-                'terminal': navigator.userAgent
             };
-            let params = this.qs.stringify(initParams);
-            this.axios.post('/notice', params).then(response => {
+            this.axios.post(this.api.forum.noticeDetail, params).then(response => {
                 let resp = response.data;
                 if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);

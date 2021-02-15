@@ -29,6 +29,8 @@ export default {
         latestTopics: '/forum/list/topic/latest',
         topicDetail: '/forum/detail/topic',
         noticeDetail: '/forum/detail/notice',
+        hideNotice: "/forum/hide/notice",
+        lockNotice: "/forum/lock/notice",
         newTopic: '/forum/new/topic',
         newReply: '/forum/new/reply',
         newBoard: '/forum/new/board',

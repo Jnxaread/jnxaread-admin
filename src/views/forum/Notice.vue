@@ -16,7 +16,7 @@
                 </div>
                 <div class="topic_head">
                     <div class="topic_author">{{notice.username}}</div>
-                    <div class="topic_time">发表于 {{notice.submittime | dateFormat}}</div>
+                    <div class="topic_time">发表于 {{notice.createTime | dateFormat}}</div>
                     <Button type="warning" size='small' class="button_delete" @click="deleteNotice(notice.id)">删除
                     </Button>
                 </div>
@@ -68,11 +68,11 @@ export default {
                 },
                 {
                     title: '发布时间',
-                    key: 'submitTime',
+                    key: 'createTime',
                     width: 180,
                     align: 'center',
                     render: (h, params) => {
-                        return h('span', {}, this.dateFormat(params.row.submitTime));
+                        return h('span', {}, this.dateFormat(params.row.createTime));
                     }
                 },
                 {
@@ -83,11 +83,11 @@ export default {
                 },
                 {
                     title: '最后编辑时间',
-                    key: 'lastSubmitTime',
+                    key: 'lastTime',
                     width: 180,
                     align: 'center',
                     render: (h, params) => {
-                        return h('span', {}, this.dateFormat(params.row.lastSubmit));
+                        return h('span', {}, this.dateFormat(params.row.lastTime));
                     }
                 },
                 {
@@ -120,17 +120,17 @@ export default {
                             locked = 1;
                         }
 
-                        let hidedButton;
-                        let hidedType;
-                        let hided;
-                        if (params.row.hided === true) {
-                            hidedButton = '上架';
-                            hidedType = 'success';
-                            hided = 0;
+                        let visibleBtn;
+                        let visibleType;
+                        let visible;
+                        if (params.row.visible === 0) {
+                            visibleBtn = '上架';
+                            visibleType = 'success';
+                            visible = 1;
                         } else {
-                            hidedButton = '下架';
-                            hidedType = 'warning';
-                            hided = 1;
+                            visibleBtn = '下架';
+                            visibleType = 'warning';
+                            visible = 0;
                         }
                         return h('div',
                                 [
@@ -162,7 +162,7 @@ export default {
                                     }, lockedButton),
                                     h('Button', {
                                         props: {
-                                            type: hidedType,
+                                            type: visibleType,
                                             size: 'small',
                                         },
                                         style: {
@@ -170,10 +170,10 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.hideNotice(params.row.id, hided);
+                                                this.hideNotice(params.row.id, visible);
                                             }
                                         }
-                                    }, hidedButton),
+                                    }, visibleBtn),
                                     h('Button', {
                                         props: {
                                             type: 'error',
@@ -251,13 +251,13 @@ export default {
                 id: id,
                 locked: locked
             };
-            this.axios.post('/lockNotice', params).then(response => {
+            this.axios.post(this.api.forum.lockNotice, params).then(response => {
                 let resp = response.data;
                 if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
                     return;
                 }
-                this.getAllNotice();
+                this.getNotices();
                 this.showModal = false;
                 this.$Message.success('操作成功！');
             })
@@ -265,15 +265,15 @@ export default {
 
         /**
          * 下架公告
-         * @param id
-         * @param hided 【0：上架；1：下架】
+         * @param id 公告ID
+         * @param visible 操作
          */
-        hideNotice(id, hided) {
+        hideNotice(id, visible) {
             let params = {
                 id: id,
-                hided: hided
+                visible: visible
             };
-            this.axios.post('/hideNotice', params).then(response => {
+            this.axios.post(this.api.forum.hideNotice, params).then(response => {
                 let resp = response.data;
                 if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);

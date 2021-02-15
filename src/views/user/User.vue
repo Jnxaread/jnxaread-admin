@@ -74,7 +74,7 @@
                     },
                     {
                         title: '注册时间',
-                        key: 'registerTime',
+                        key: 'createTime',
                         width: 240,
                         align: 'center',
                         render: (h, params) => {
