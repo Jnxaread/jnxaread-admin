@@ -11,12 +11,12 @@
         <Modal class="modal" v-model="showModal" :title="notice.title" width="50" footer-hide>
             <div class="topic">
                 <div class="topic_top">
-                    <div class="topic_label">【<span>{{notice.label}}</span>】</div>
-                    <div class="topic_title">{{notice.title}}</div>
+                    <div class="topic_label">【<span>{{ notice.label }}</span>】</div>
+                    <div class="topic_title">{{ notice.title }}</div>
                 </div>
                 <div class="topic_head">
-                    <div class="topic_author">{{notice.username}}</div>
-                    <div class="topic_time">发表于 {{notice.createTime | dateFormat}}</div>
+                    <div class="topic_author">{{ notice.username }}</div>
+                    <div class="topic_time">发表于 {{ notice.createTime | dateFormat }}</div>
                     <Button type="warning" size='small' class="button_delete" @click="deleteNotice(notice.id)">删除
                     </Button>
                 </div>
@@ -134,6 +134,30 @@ export default {
                         }
                         return h('div',
                                 [
+                                    h('ButtonGroup', [
+                                        h('Button', {
+                                            props: {
+                                                type: 'primary',
+                                                icon: 'ios-skip-backward'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.editNotice(params.row.id);
+                                                }
+                                            }
+                                        }),
+                                        h('Button', {
+                                            props: {
+                                                type: 'primary',
+                                                icon: 'ios-skip-forward'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.editNotice(params.row.id);
+                                                }
+                                            }
+                                        }),
+                                    ]),
                                     h('Button', {
                                         props: {
                                             type: 'info',
