@@ -23,10 +23,7 @@ Vue.filter('dateFormat', function (tick) {
   return moment(tick).format("YYYY-MM-DD HH:mm:ss");
 });
 
-//开发环境
-// axios.defaults.baseURL = 'http://localhost:6002';
-//生产环境
-axios.defaults.baseURL = 'http://jnxaread.com/admin-api';
+axios.defaults.baseURL = process.env.VUE_APP_SERVER;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;
 
