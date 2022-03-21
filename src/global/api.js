@@ -2,7 +2,7 @@ export default {
     user: {
         login: '/user/login',
         logout: '/user/logout',
-        users: '/user/list/user',
+        list: '/user/list',
     },
     library: {
         fictions: '/library/list/fiction',
