@@ -134,30 +134,17 @@ export default {
                         }
                         return h('div',
                                 [
-                                    h('ButtonGroup', [
-                                        h('Button', {
-                                            props: {
-                                                type: 'primary',
-                                                icon: 'ios-skip-backward'
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.editNotice(params.row.id);
-                                                }
+                                    h('Button', {
+                                        props: {
+                                            type: 'info',
+                                            size: 'small',
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.upToTop(params.row.id);
                                             }
-                                        }),
-                                        h('Button', {
-                                            props: {
-                                                type: 'primary',
-                                                icon: 'ios-skip-forward'
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.editNotice(params.row.id);
-                                                }
-                                            }
-                                        }),
-                                    ]),
+                                        }
+                                    }, '置顶'),
                                     h('Button', {
                                         props: {
                                             type: 'info',
@@ -267,6 +254,20 @@ export default {
         addNotice() {
             this.$router.push('/toSubmitNotice');
         },
+        upToTop(id) {
+            let params = {
+                id: id
+            };
+            this.axios.post(this.api.forum.topNotice, params).then(response => {
+                let resp = response.data;
+                if (resp.status !== "000000") {
+                    this.$Message.error(resp.msg);
+                    return;
+                }
+                this.getNotices();
+                this.$Message.success('操作成功！');
+            });
+        },
         editNotice(id) {
             this.$router.push('/toSubmitNotice?id=' + id);
         },
@@ -284,7 +285,7 @@ export default {
                 this.getNotices();
                 this.showModal = false;
                 this.$Message.success('操作成功！');
-            })
+            });
         },
 
         /**

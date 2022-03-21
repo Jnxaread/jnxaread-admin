@@ -34,6 +34,7 @@ export default {
         newTopic: '/forum/new/topic',
         newReply: '/forum/new/reply',
         newBoard: '/forum/new/board',
+        topNotice: '/forum/notice/upToTop',
     },
     project: {
         version: "/project/list/version",

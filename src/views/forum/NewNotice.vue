@@ -11,9 +11,6 @@
                     <Input v-model="notice.title" maxlength="35" show-word-limit size="large" placeholder="请输入标题" style="width: 43%;"/>
                     <span>最多输入35个字符</span>
                 </div>
-                <div class="notice_position">
-                    <Input v-model="notice.position" type="number" size="large" placeholder="请指定位置" style="width: 120px;"/>
-                </div>
             </div>
             <div class="notice_content">
                 <editor ref="editor"></editor>
@@ -37,7 +34,6 @@ export default {
                 label: '',
                 title: '',
                 content: '',
-                position: null,
             }
         }
     },
@@ -67,7 +63,6 @@ export default {
                 this.notice.label = resp.data.label;
                 this.notice.title = resp.data.title;
                 this.notice.content = resp.data.content;
-                this.notice.position = resp.data.position;
                 this.$store.commit('setContent', this.notice.content);
                 this.$refs.editor.setContent();
             });
@@ -89,10 +84,6 @@ export default {
             }
             if (this.notice.title.length < 4) {
                 this.$Message.error('公告标题的长度不得低于4个字符');
-                return;
-            }
-            if (this.notice.position == null) {
-                this.$Message.error('请指定公告位置');
                 return;
             }
             let validate = this.$store.getters.getContent;
@@ -180,11 +171,6 @@ export default {
 .notice_title {
     width: 80%;
     margin-left: 15px;
-    display: inline;
-}
-
-.notice_position {
-    margin-left: 40px;
     display: inline;
 }
 
