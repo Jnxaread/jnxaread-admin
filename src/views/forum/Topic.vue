@@ -1,6 +1,6 @@
 <template>
     <div class="user_main">
-        <Table :columns="columns" :data="data"></Table>
+        <Table :columns="columns" :data="topics"></Table>
         <div class="paging_box">
             <Page v-if="paging.total>0" :current="paging.currentPage" :page-size="paging.pageSize"
                   :total="paging.total" show-elevator @on-change="changePage"/>
@@ -8,47 +8,76 @@
 
         <Modal class="modal" v-model="showModal" :title="topic.title" width="50" footer-hide>
             <div class="topic">
-                <div class="topic_top">
-                    <div class="topic_label">【<span>{{ topic.label }}</span>】</div>
-                    <div class="topic_title">{{ topic.title }}</div>
+                <div class="detail">
+                    <div class="title">【{{ topic.label }}】{{ topic.title }}</div>
+                    <div class="info">
+                        <div class="info_author">
+                            <Icon class="authorIcon" type="md-person" size="22"/>
+                            <span>{{ topic.username }}</span>
+                        </div>
+                        <div class="info_submitTime">
+                            发表于
+                            <Time v-if="topic.createTime" :time="topic.createTime"/>
+                        </div>
+                        <div class="info_floor">楼主</div>
+                    </div>
+                    <div class="content" v-html="topic.content"></div>
                 </div>
-                <div class="topic_head">
-                    <div class="topic_author">{{ topic.username }}</div>
-                    <div class="topic_time">发表于 {{ topic.createTime | dateFormat }}</div>
-                    <Button type="warning" size='small' class="button_delete" @click="deleteTopic(topic.id)">删除</Button>
-                    <div class="floor">楼主</div>
-                </div>
-                <div class="topic_content" v-html="topic.content"></div>
-            </div>
-            <div class="reply" v-for="(reply, index) in pageReplyList" :key="index">
-                <div class="reply_head">
-                    <div class="reply_author">{{ reply.username }}</div>
-                    <div class="reply_time">发表于 {{ reply.createTime | dateFormat }}</div>
-                    <Button type="warning" size='small' class="button_delete" @click="deleteReply(reply.id)">删除</Button>
-                    <div class="floor">{{ reply.floor }}楼</div>
-                </div>
-                <div class="reply_content">
-                    <div class="reply_quote" v-if="reply.quote!==0">
-                        <div class="quote_icon_e" v-if="replyList[reply.quoteIndex]">
-                            <div class="reply_quote_head">
-                                <span class="reply_quote_info">
-                                    {{ replyList[reply.quoteIndex].username }} 发表于
-                                    {{ replyList[reply.quoteIndex].createTime | dateFormat }}
-                                </span>
-                                <span class="reply_quote_floor">
-                                    {{ replyList[reply.quoteIndex].floor }}楼
-                                </span>
+                <div class="replyArea">
+                    <div class="detail" v-for="(reply, index) in replies" :key="index">
+                        <div class="info">
+                            <div class="info_author">
+                                <Icon class="authorIcon" type="md-person" size="22"/>
+                                <span>{{ reply.username }}</span>
                             </div>
-                            <span v-html="replyList[reply.quoteIndex].content"></span>
+                            <div class="info_submitTime">
+                                发表于
+                                <Time v-if="topic.createTime" :time="reply.createTime"/>
+                            </div>
+                            <div class="info_floor">{{ reply.floor }}楼</div>
+                        </div>
+                        <div class="content">
+                            <div v-if="reply.quote!==0">
+                                <div class="reply_quote" v-if="screenWidth>600">
+                                    <div class="quote_icon_e">
+                                        <div class="reply_quote_head">
+                                            <span class="reply_quote_info">
+                                                {{ reply.quotedReply.username }} 发表于
+                                                <Time :time="reply.quotedReply.createTime" type="datetime"/>
+                                            </span>
+                                            <span class="reply_quote_floor">
+                                                {{ reply.quotedReply.floor }}楼
+                                            </span>
+                                        </div>
+                                        <span class="modal_reply_overflow_page" v-html="reply.quotedReply.content"/>
+                                    </div>
+                                </div>
+                                <div class="reply_quote" v-else>
+                                    <div class="reply_quote_head">
+                                        <span class="font_quote">引用 @</span>
+                                        <span class="reply_quote_info">{{ reply.quotedReply.username }}</span>
+                                        <span class="font_quote"> 发表的</span>
+                                        <span class="reply_quote_floor">{{ reply.quotedReply.floor }}楼</span>
+                                    </div>
+                                    <div class="modal_reply_overflow" v-html="reply.quotedReply.content"></div>
+                                </div>
+                            </div>
+                            <span v-html="reply.content"></span>
+                        </div>
+                        <div class="reply_operate">
+                            <Button type="warning" size='small' class="button_delete" @click="hideReply(reply.id)">
+                                隐藏
+                            </Button>
+                            <Button type="error" size='small' class="button_delete" @click="deleteReply(reply.id)">
+                                删除
+                            </Button>
                         </div>
                     </div>
-                    <span v-html="reply.content"></span>
+                    <div class="paging_box">
+                        <Page v-if="paging.total>0" :current="paging.currentPage" :page-size="paging.pageSize"
+                              :total="paging.total" show-elevator @on-change="changeReplyPage"/>
+                    </div>
                 </div>
-            </div>
-            <div class="replyPaging_box">
-                <Page class="replyPaging" v-if="replyPaging.total>0" :current="replyPaging.currentPage"
-                      :page-size="replyPaging.pageSize"
-                      :total="replyPaging.total" show-elevator @on-change="changeReplyPage"/>
             </div>
         </Modal>
     </div>
@@ -82,9 +111,9 @@ export default {
                             class: titleClass,
                             on: {
                                 click: () => {
-                                    this.replyList = [];
-                                    this.currentTopicId = params.row.id;
-                                    this.getTopicDetail();
+                                    this.replies = [];
+                                    this.replyPaging.currentPage = 1;
+                                    this.getTopic(params.row.id);
                                 }
                             }
                         }, params.row.title);
@@ -222,10 +251,9 @@ export default {
                     }
                 },
             ],
-            data: [],
+            topics: [],
             topic: {},
-            replyList: [],
-            pageReplyList: [],
+            replies: [],
             paging: {
                 currentPage: 1,
                 pageSize: 100,
@@ -237,7 +265,6 @@ export default {
                 total: 0,
             },
             showModal: false,
-            currentTopicId: null,
         }
     },
     created: function () {
@@ -251,61 +278,30 @@ export default {
             let params = {
                 'page': this.paging.currentPage
             };
-            this.axios.post('/allTopic', params).then(response => {
+            this.axios.post(this.api.forum.topics, params).then(response => {
                 let resp = response.data;
-                if (resp.status != "000000") {
+                if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
                     return;
                 }
-                this.data = resp.data.topicList;
+                this.topics = resp.data.topicList;
                 this.paging.total = resp.data.topicCount;
             })
         },
-        getTopicDetail() {
+        getTopic(id) {
             let params = {
-                'id': this.currentTopicId,
+                'id': id,
                 'page': this.replyPaging.currentPage,
             };
-            this.axios.post('/topic', params).then(response => {
+            this.axios.post(this.api.forum.topicDetail, params).then(response => {
                 let resp = response.data;
-                if (resp.status != "000000") {
+                if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
                     this.$router.push('/');
                     return;
                 }
                 this.topic = resp.data.topic;
-                this.pageReplyList = resp.data.replyList;
-                for (let i = 0; i < this.pageReplyList.length; i++) {
-                    if (this.pageReplyList[i].quote != 0) {
-                        this.pageReplyList[i].quoteIndex = this.pageReplyList[i].quote - 1;
-                    }
-                }
-                let lastIndex_f = this.replyList.length - 1;
-                if (this.replyList.length == 0 || this.replyList[lastIndex_f].floor < resp.data.replyList[0].floor) {
-                    for (let i = 0; i < resp.data.replyList.length; i++) {
-                        this.replyList.push(resp.data.replyList[i]);
-                    }
-                }
-                let lastIndex_s = this.replyList.length - 1;
-                let respLastIndex = resp.data.replyList.length - 1;
-                if (this.replyList.length != 0 && this.replyList[lastIndex_s].floor >= resp.data.replyList[0].floor && this.replyList[lastIndex_s].floor < resp.data.replyList[respLastIndex].floor) {
-                    for (let i = 0; i < resp.data.replyList.length; i++) {
-                        if (this.replyList[lastIndex_s].floor < resp.data.replyList[i].floor) {
-                            this.replyList.push(resp.data.replyList[i]);
-                        }
-                    }
-                } else if (this.replyList.length != 0 && this.replyList[0].floor < resp.data.replyList[0].floor && this.replyList[lastIndex_s].floor > resp.data.replyList[respLastIndex].floor) {
-                    for (let i = 0; i < this.replyList.length; i++) {
-                        if (this.replyList[i].floor == resp.data.replyList[0].floor) {
-                            break;
-                        } else if (this.replyList[i].floor > resp.data.replyList[0].floor) {
-                            for (let j = 0; j < resp.data.replyList.length; j++) {
-                                this.replyList.splice(i, 0, resp.data.replyList[j]);
-                            }
-                            break;
-                        }
-                    }
-                }
+                this.replies = resp.data.replies;
                 this.replyPaging.total = resp.data.replyCount;
                 this.showModal = true;
             });
@@ -317,7 +313,7 @@ export default {
             };
             this.axios.post('/lockTopic', params).then(response => {
                 let resp = response.data;
-                if (resp.status != "000000") {
+                if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
                     return;
                 }
@@ -333,7 +329,7 @@ export default {
             };
             this.axios.post('/hideTopic', params).then(response => {
                 let resp = response.data;
-                if (resp.status != "000000") {
+                if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
                     return;
                 }
@@ -348,7 +344,7 @@ export default {
             };
             this.axios.post('/deleteTopic', params).then(response => {
                 let resp = response.data;
-                if (resp.status != "000000") {
+                if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
                     return;
                 }
@@ -361,15 +357,15 @@ export default {
             let params = {
                 'id': id
             };
-            this.axios.post('/deleteReply', params).then(response => {
+            this.axios.post(this.api.forum.deleteReply, params).then(response => {
                 let resp = response.data;
-                if (resp.status != "000000") {
+                if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
                     return;
                 }
                 this.$Message.success('删除成功！');
-                this.getTopicDetail();
-            })
+                this.getTopic();
+            });
         },
         changePage(page) {
             this.paging.currentPage = page;
@@ -377,7 +373,7 @@ export default {
         },
         changeReplyPage(page) {
             this.replyPaging.currentPage = page;
-            this.getTopicDetail();
+            this.getTopic();
         },
         dateFormat: function (tick) {
             return moment(tick).format("YYYY-MM-DD HH:mm:ss");
@@ -386,113 +382,74 @@ export default {
 }
 </script>
 
-<style scoped>
-
-.paging_box {
-    float: right;
-    margin: 20px 45px 30px 0px;
-}
-
+<style scoped lang="scss">
 .topic {
-    width: 98%;
-    padding: 20px;
-    margin: 0px auto;
-    border-radius: 10px;
-    border: 2px solid #819799;
+    width: 100%;
 }
 
-.topic_top {
+.detail {
     width: 100%;
+    background-color: #f5f5f5;
+    border: 1px solid #c4c4c4;
+    border-radius: 6px;
+    padding: 20px 35px;
+    margin-bottom: 6px;
+}
+
+.title {
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 15px;
     border-bottom: 3px solid #1c5899;
 }
 
-.topic_label {
-    display: inline;
+.info {
+    font-size: 1.1em;
+    padding-bottom: 2px;
+    border-bottom: 1px solid #c4c4c4;
 }
 
-.topic_label span {
-    color: #ff78f2;
-}
-
-.topic_title {
-    display: inline;
-    padding: 10px 5px;
-    font-size: 1.5em;
-    font-weight: bold;
-}
-
-.topic_head {
-    width: 100%;
-    font-size: 1.2em;
-    margin-top: 25px;
-    border-bottom: 1px solid #999;
-}
-
-.topic_author {
-    color: #27313e;
-    display: inline;
+.info_author {
+    display: inline-block;
     padding: 0px 15px;
-    border-right: 2px solid darkgrey;
+    border-right: 2px solid #a9a9a9;
+
+    span {
+        margin-left: 5px;
+    }
 }
 
-.topic_time {
-    color: cadetblue;
-    display: inline;
-    padding: 0px 15px;
+.info_submitTime {
+    display: inline-block;
+    padding: 0 15px;
+    color: #808695;
 }
 
-.topic_content {
-    width: 100%;
-    padding: 0px 15px;
-    margin-top: 25px;
-    font-size: 1.3em;
-    color: black;
+.info_submitTime_mobile {
+    display: none;
 }
 
-.reply {
-    width: 96%;
-    padding: 20px;
-    margin: 10px auto;
-}
-
-.reply_head {
-    width: 100%;
-    font-size: 1.2em;
-    border-bottom: 1px solid #999;
-}
-
-.reply_author {
-    color: #27313e;
-    display: inline;
-    padding: 0px 15px;
-    border-right: 2px solid darkgrey;
-}
-
-.reply_time {
-    color: cadetblue;
-    display: inline;
-    padding: 0px 15px;
-}
-
-.floor {
+.info_floor {
     float: right;
-    margin-right: 15px;
 }
 
-.reply_content {
-    width: 100%;
-    padding: 0px 15px;
-    margin-top: 25px;
+.content {
     font-size: 1.3em;
-    color: #515a6e;
+    line-height: 38px;
+    padding: 15px;
 }
 
+.replyArea {
+    padding-bottom: 5px;
+    overflow: hidden;
+}
 
 .reply_quote {
     width: 100%;
-    margin: 10px 0px 25px 0px;
+    margin: 10px 0px 0 0px;
     padding: 10px 10px 10px 65px;
-    background: #f1f2f3 url("../../assets/icons/icon_quote_s.gif") no-repeat 20px 6px;
+    border-radius: 10px;
+    background: #e8eaec url("../../assets/icons/icon_quote_s.gif") no-repeat 20px 6px;
 }
 
 .quote_icon_e {
@@ -512,19 +469,82 @@ export default {
     margin-left: 15px;
 }
 
-.replyPaging_box {
+.reply_operate {
+    width: 100%;
+    height: 50px;
+    user-select: none;
+    line-height: 50px;
+    padding: 0px 15px 5px 15px;
+    background: url("../../assets/icons/lattice.png") left top repeat-x;
+
+    a {
+        color: #333333;
+        padding: 5px 10px 5px 25px;
+        opacity: 0.3;
+        background: url("../../assets/icons/fastreply.gif") no-repeat 0 50%;
+    }
+}
+
+.reply_operate:hover {
+    width: 100%;
+    height: 50px;
+    opacity: 1;
+    line-height: 50px;
+    padding: 0px 15px 5px 15px;
+    background: url("../../assets/icons/lattice.png") left top repeat-x;
+
+    a {
+        color: #333333;
+        padding: 5px 10px 5px 25px;
+        background: url("../../assets/icons/fastreply.gif") no-repeat 0 50%;
+    }
+}
+
+.paging_box {
+    float: right;
+    margin: 5px 45px 0px 0px;
+}
+
+.submitArea {
+    width: 100%;
+    background-color: #f5f5f5;
+    border: 1px solid #c4c4c4;
+    border-radius: 6px;
+    padding: 35px 35px 25px 35px;
+    margin-top: 30px;
+}
+
+.submit_button {
+    width: 120px;
+}
+
+.ivu-btn {
+    border: 0;
+    box-shadow: none;
+    background-color: #999;
+}
+
+.modal_reply /deep/ .ivu-modal-body {
+    padding: 45px 30px 30px 30px !important;
+}
+
+.modal_reply_overflow_page {
+    width: 958px;
     overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
-.replyPaging {
-    float: right;
-    margin: 0px 45px 0px 0px;
+.modal_reply_overflow {
+    width: 800px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
-
-.button_delete {
-    float: right;
-}
-
 </style>
 
 <style>

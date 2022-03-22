@@ -25,9 +25,9 @@ export default {
     forum: {
         boards: '/forum/list/board',
         notices: '/forum/list/notice',
-        topics: '/forum/list/topic',
+        topics: '/forum/topic/list',
         latestTopics: '/forum/list/topic/latest',
-        topicDetail: '/forum/detail/topic',
+        topicDetail: '/forum/topic/detail',
         noticeDetail: '/forum/detail/notice',
         hideNotice: "/forum/hide/notice",
         lockNotice: "/forum/lock/notice",
@@ -36,6 +36,7 @@ export default {
         newReply: '/forum/new/reply',
         newBoard: '/forum/new/board',
         topNotice: '/forum/notice/upToTop',
+        deleteReply: '/forum/reply/delete',
     },
     project: {
         version: "/project/list/version",
