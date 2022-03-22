@@ -31,6 +31,7 @@ export default {
         noticeDetail: '/forum/detail/notice',
         hideNotice: "/forum/hide/notice",
         lockNotice: "/forum/lock/notice",
+        addOrUpdateNotice: "/forum/notice/addOrUpdate",
         newTopic: '/forum/new/topic',
         newReply: '/forum/new/reply',
         newBoard: '/forum/new/board',

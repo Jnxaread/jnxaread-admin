@@ -8,13 +8,14 @@
                     <Input v-model="notice.label" maxlength="4" size="large" placeholder="四字标签" style="width: 86px;"/>
                 </div>
                 <div class="notice_title">
-                    <Input v-model="notice.title" maxlength="35" show-word-limit size="large" placeholder="请输入标题" style="width: 43%;"/>
+                    <Input v-model="notice.title" maxlength="35" show-word-limit size="large" placeholder="请输入标题"
+                           style="width: 43%;"/>
                     <span>最多输入35个字符</span>
                 </div>
             </div>
             <div class="notice_content">
                 <editor ref="editor"></editor>
-                <Button class="submit_button" type="primary" size="large" @click="submitNotice()">发表公告</Button>
+                <Button class="submit_button" type="primary" size="large" @click="addOrUpdateNotice()">保存</Button>
             </div>
         </div>
     </div>
@@ -59,15 +60,12 @@ export default {
                     this.$router.push('/');
                     return;
                 }
-                this.notice.id = resp.data.id;
-                this.notice.label = resp.data.label;
-                this.notice.title = resp.data.title;
-                this.notice.content = resp.data.content;
+                this.notice = resp.data;
                 this.$store.commit('setContent', this.notice.content);
                 this.$refs.editor.setContent();
             });
         },
-        submitNotice() {
+        addOrUpdateNotice() {
             this.$refs.editor.getContent();
             if (this.notice.label === '') {
                 this.$Message.error('请输入公告标签！');
@@ -97,26 +95,15 @@ export default {
                 return;
             }
             this.notice.content = this.$store.getters.getContent;
-            if (this.notice.id == null) {
-                this.axios.post('/forum/new/notice', this.notice).then(response => {
-                    let resp = response.data;
-                    if (resp.status !== "000000") {
-                        this.instance('error', resp.msg);
-                        return;
-                    }
-                    this.$router.push('/notice');
-                });
-            } else {
-                this.axios.post('/editNotice', this.notice).then(response => {
-                    let resp = response.data;
-                    if (resp.status !== "000000") {
-                        this.instance('error', resp.msg);
-                        return;
-                    }
-                    this.$Message.success('编辑成功！');
-                    this.$router.push('/notice');
-                });
-            }
+            this.axios.post(this.api.forum.addOrUpdateNotice, this.notice).then(response => {
+                let resp = response.data;
+                if (resp.status !== "000000") {
+                    this.instance('error', resp.msg);
+                    return;
+                }
+                this.$Message.success('操作成功！');
+                this.$router.push('/notice');
+            });
         },
         instance(type, content) {
             switch (type) {
