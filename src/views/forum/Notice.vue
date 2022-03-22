@@ -63,7 +63,7 @@ export default {
                 {
                     title: '作者',
                     key: 'username',
-                    width: 200,
+                    width: 150,
                     align: 'center'
                 },
                 {
@@ -104,7 +104,7 @@ export default {
                 },
                 {
                     title: '操作',
-                    width: 250,
+                    width: 300,
                     align: 'center',
                     render: (h, params) => {
                         let lockedButton;
@@ -149,6 +149,9 @@ export default {
                                         props: {
                                             type: 'info',
                                             size: 'small',
+                                        },
+                                        style: {
+                                            marginLeft: '10px'
                                         },
                                         on: {
                                             click: () => {

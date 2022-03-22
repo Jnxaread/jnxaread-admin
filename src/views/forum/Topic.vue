@@ -6,7 +6,7 @@
                   :total="paging.total" show-elevator @on-change="changePage"/>
         </div>
 
-        <Modal class="modal" v-model="showModal" :title="topic.title" width="50" footer-hide>
+        <Modal class="modal" v-model="showModal" :title="topic.title" width="70" footer-hide>
             <div class="topic">
                 <div class="detail">
                     <div class="title">【{{ topic.label }}】{{ topic.title }}</div>
@@ -102,7 +102,7 @@ export default {
                     //align: 'center',
                     render: (h, params) => {
                         let titleClass;
-                        if (params.row.visible === 1) {
+                        if (params.row.visible === 0) {
                             titleClass = 'table_title_hided';
                         } else {
                             titleClass = 'table_title';
@@ -113,7 +113,8 @@ export default {
                                 click: () => {
                                     this.replies = [];
                                     this.replyPaging.currentPage = 1;
-                                    this.getTopic(params.row.id);
+                                    this.topicId = params.row.id;
+                                    this.getTopic(this.topicId);
                                 }
                             }
                         }, params.row.title);
@@ -192,17 +193,17 @@ export default {
                             locked = 1;
                         }
 
-                        let hidedButton;
-                        let hidedType;
+                        let visibleBtn;
+                        let visibleType;
                         let visible;
-                        if (params.row.visible === 1) {
-                            hidedButton = '显示';
-                            hidedType = 'success';
-                            visible = 0;
-                        } else {
-                            hidedButton = '隐藏';
-                            hidedType = 'warning';
+                        if (params.row.visible === 0) {
+                            visibleBtn = '显示';
+                            visibleType = 'success';
                             visible = 1;
+                        } else {
+                            visibleBtn = '隐藏';
+                            visibleType = 'warning';
+                            visible = 0;
                         }
                         return h('div',
                                 [
@@ -220,7 +221,7 @@ export default {
                                     }, lockedButton),
                                     h('Button', {
                                         props: {
-                                            type: hidedType,
+                                            type: visibleType,
                                             size: 'small',
                                         },
                                         style: {
@@ -228,10 +229,10 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.hideTopic(params.row.id, visible);
+                                                this.updateVisibleOfTopic(params.row.id, visible);
                                             }
                                         }
-                                    }, hidedButton),
+                                    }, visibleBtn),
                                     h('Button', {
                                         props: {
                                             type: 'error',
@@ -254,6 +255,7 @@ export default {
             topics: [],
             topic: {},
             replies: [],
+            topicId: null,
             paging: {
                 currentPage: 1,
                 pageSize: 100,
@@ -288,9 +290,9 @@ export default {
                 this.paging.total = resp.data.topicCount;
             })
         },
-        getTopic(id) {
+        getTopic() {
             let params = {
-                'id': id,
+                'id': this.topicId,
                 'page': this.replyPaging.currentPage,
             };
             this.axios.post(this.api.forum.topicDetail, params).then(response => {
@@ -322,12 +324,12 @@ export default {
                 this.$Message.success('操作成功！');
             })
         },
-        hideTopic(id, hided) {
+        updateVisibleOfTopic(id, visible) {
             let params = {
                 'id': id,
-                'hided': hided
+                'visible': visible
             };
-            this.axios.post('/hideTopic', params).then(response => {
+            this.axios.post(this.api.forum.topicVisible, params).then(response => {
                 let resp = response.data;
                 if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
@@ -411,7 +413,7 @@ export default {
 
 .info_author {
     display: inline-block;
-    padding: 0px 15px;
+    padding: 0 15px;
     border-right: 2px solid #a9a9a9;
 
     span {
@@ -474,29 +476,11 @@ export default {
     height: 50px;
     user-select: none;
     line-height: 50px;
-    padding: 0px 15px 5px 15px;
+    padding: 0 15px 5px 15px;
     background: url("../../assets/icons/lattice.png") left top repeat-x;
 
-    a {
-        color: #333333;
-        padding: 5px 10px 5px 25px;
-        opacity: 0.3;
-        background: url("../../assets/icons/fastreply.gif") no-repeat 0 50%;
-    }
-}
-
-.reply_operate:hover {
-    width: 100%;
-    height: 50px;
-    opacity: 1;
-    line-height: 50px;
-    padding: 0px 15px 5px 15px;
-    background: url("../../assets/icons/lattice.png") left top repeat-x;
-
-    a {
-        color: #333333;
-        padding: 5px 10px 5px 25px;
-        background: url("../../assets/icons/fastreply.gif") no-repeat 0 50%;
+    Button {
+        margin-right: 10px;
     }
 }
 

@@ -37,6 +37,7 @@ export default {
         newBoard: '/forum/new/board',
         topNotice: '/forum/notice/upToTop',
         deleteReply: '/forum/reply/delete',
+        topicVisible: '/forum/topic/visible',
     },
     project: {
         version: "/project/list/version",

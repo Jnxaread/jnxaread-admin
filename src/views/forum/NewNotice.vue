@@ -95,6 +95,8 @@ export default {
                 return;
             }
             this.notice.content = this.$store.getters.getContent;
+            delete this.notice.createTime;
+            delete this.notice.lastTime;
             this.axios.post(this.api.forum.addOrUpdateNotice, this.notice).then(response => {
                 let resp = response.data;
                 if (resp.status !== "000000") {
