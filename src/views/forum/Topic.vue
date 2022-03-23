@@ -186,11 +186,11 @@ export default {
                         if (params.row.locked === true) {
                             lockedButton = '解锁';
                             lockedType = 'success';
-                            locked = 0;
+                            locked = false;
                         } else {
                             lockedButton = '锁定';
                             lockedType = 'warning';
-                            locked = 1;
+                            locked = true;
                         }
 
                         let visibleBtn;
@@ -215,7 +215,7 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.lockTopic(params.row.id, locked)
+                                                this.updateLockOfTopic(params.row.id, locked)
                                             }
                                         }
                                     }, lockedButton),
@@ -243,7 +243,7 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.deleteNotice(params.row.id);
+                                                this.deleteTopic(params.row.id);
                                             }
                                         }
                                     }, '删除'),
@@ -280,7 +280,7 @@ export default {
             let params = {
                 'page': this.paging.currentPage
             };
-            this.axios.post(this.api.forum.topics, params).then(response => {
+            this.axios.post(this.api.forum.topic.list, params).then(response => {
                 let resp = response.data;
                 if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
@@ -295,7 +295,7 @@ export default {
                 'id': this.topicId,
                 'page': this.replyPaging.currentPage,
             };
-            this.axios.post(this.api.forum.topicDetail, params).then(response => {
+            this.axios.post(this.api.forum.topic.detail, params).then(response => {
                 let resp = response.data;
                 if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
@@ -308,12 +308,12 @@ export default {
                 this.showModal = true;
             });
         },
-        lockTopic(id, locked) {
+        updateLockOfTopic(id, locked) {
             let params = {
                 'id': id,
-                'locked': locked
+                'lock': locked
             };
-            this.axios.post('/lockTopic', params).then(response => {
+            this.axios.post(this.api.forum.topic.lock, params).then(response => {
                 let resp = response.data;
                 if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
@@ -329,7 +329,7 @@ export default {
                 'id': id,
                 'visible': visible
             };
-            this.axios.post(this.api.forum.topicVisible, params).then(response => {
+            this.axios.post(this.api.forum.topic.visible, params).then(response => {
                 let resp = response.data;
                 if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
@@ -344,7 +344,7 @@ export default {
             let params = {
                 'id': id
             };
-            this.axios.post('/deleteTopic', params).then(response => {
+            this.axios.post(this.api.forum.topic.delete, params).then(response => {
                 let resp = response.data;
                 if (resp.status !== "000000") {
                     this.$Message.error(resp.msg);
@@ -353,7 +353,7 @@ export default {
                 this.getAllTopic();
                 this.showModal = false;
                 this.$Message.success('删除成功！');
-            })
+            });
         },
         deleteReply(id) {
             let params = {
